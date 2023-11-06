@@ -3,8 +3,15 @@ from PySide6.QtWidgets import QWidget, QHBoxLayout, QLabel, QLineEdit
 class DelayButton(QWidget):
     def __init__(self):
         super().__init__()
-        input_field = QLineEdit()
-        input_field.setPlaceholderText("Delay in seconds")
+        self.input_field = QLineEdit()
+        self.input_field.setPlaceholderText("Delay in seconds")
         layout = QHBoxLayout()
-        layout.addWidget(input_field)
+        layout.addWidget(self.input_field)
         self.setLayout(layout)
+
+    def get_delay(self):
+        try:
+            return int(self.input_field.text())
+        except:
+            return None
+

@@ -1,25 +1,49 @@
-from PySide6.QtWidgets import QWidget, QLineEdit, QHBoxLayout, QPushButton, QVBoxLayout
+from PySide6.QtWidgets import QWidget, QLineEdit, QHBoxLayout, QPushButton, QVBoxLayout, QTableWidget, QTableWidgetItem
 
 class HostTable(QWidget):
     def __init__(self):
         super().__init__() 
-        host_input = QLineEdit()
-        host_input.setPlaceholderText("host")
-        name_input = QLineEdit()
-        name_input.setPlaceholderText("name") 
+        self.host_input = QLineEdit()
+        self.host_input.setPlaceholderText("host")
+        self.name_input = QLineEdit()
+        self.name_input.setPlaceholderText("name") 
         host_button = QPushButton("+")
         host_button.setFixedWidth(30)
         remove_host_button = QPushButton("🗑️")
         remove_host_button.setFixedWidth(30)
-
+        self.table = QTableWidget()
+        self.table.setColumnCount(2)
+        self.table.setHorizontalHeaderLabels(['Host Address', 'Host Name'])
 
         horizontal_layout = QHBoxLayout()
-        horizontal_layout.addWidget(host_input)
-        horizontal_layout.addWidget(name_input) 
+        horizontal_layout.addWidget(self.host_input)
+        horizontal_layout.addWidget(self.name_input) 
         horizontal_layout.addWidget(host_button)
         horizontal_layout.addWidget(remove_host_button)
 
         layout = QVBoxLayout()
         layout.addLayout(horizontal_layout)
+        layout.addWidget(self.table)
 
+        host_button.clicked.connect(self.add_host)
+        remove_host_button.clicked.connect(self.remove_host)
+        
         self.setLayout(layout)
+
+    def add_host(self):
+        host_address = self.host_input.text()
+        host_name = self.name_input.text()
+        if host_address and host_name:
+            row_position = self.table.rowCount()
+            self.table.insertRow(row_position)
+            self.table.setItem(row_position, 0, QTableWidgetItem(host_address))
+            self.table.setItem(row_position, 1, QTableWidgetItem(host_name))
+        self.host_input.clear()
+        self.name_input.clear()
+
+    def remove_host(self):
+        selected_items = self.table.selectedItems()
+        if selected_items:
+            row = selected_items[0].row()
+            self.table.removeRow(row)
+
