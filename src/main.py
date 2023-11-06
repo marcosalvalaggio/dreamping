@@ -4,6 +4,8 @@ from PySide6.QtWidgets import QApplication, QMainWindow, QVBoxLayout, QWidget, Q
 from delay import DelayButton
 from save_path import FileSaveButton
 from host_table import HostTable
+from play import PlayButton
+from stop import StopButton
 
 # teoricamente sulla riga sotto posso mettere i delay in secondi e aggiungere la directory dove salvare i file del ping creando un layout QHBoxLayout
 class DreamPingApp(QMainWindow):
@@ -20,9 +22,13 @@ class DreamPingApp(QMainWindow):
         delay_widget = DelayButton()
         save_widget = FileSaveButton()
         host_widget = HostTable()
+        play_widget = PlayButton()  
+        stop_widget = StopButton()
         
         horizontal_layout.addWidget(delay_widget)
         horizontal_layout.addWidget(save_widget)
+        horizontal_layout.addWidget(play_widget)
+        horizontal_layout.addWidget(stop_widget)
 
         layout.addWidget(host_widget)
         layout.addLayout(horizontal_layout)
