@@ -16,4 +16,3 @@ async def check_host(host: str, name: str, save_path: str, log: bool) -> None:
 async def host_pipeline(hosts: List[str], name: str, save_path: str, ) -> None:
     await asyncio.gather(*[check_host(host=host, name=name, save_path=save_path) for host in hosts])
 
-
