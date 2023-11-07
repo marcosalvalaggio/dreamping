@@ -39,6 +39,7 @@ class DreamPingApp(QMainWindow):
         central_widget.setLayout(layout)
         self.setCentralWidget(central_widget)
 
+        # Lab
         print(delay_widget.get_delay())
 
 

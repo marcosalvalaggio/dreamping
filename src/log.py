@@ -4,6 +4,7 @@ class LogCheckBox(QWidget):
     def __init__(self):
         super().__init__()
         self.input_field = QCheckBox()
+        self.input_field.setChecked(True)
         self.input_field.setText("Log")
         layout = QHBoxLayout()
         layout.addWidget(self.input_field)
