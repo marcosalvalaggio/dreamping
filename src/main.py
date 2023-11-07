@@ -1,5 +1,6 @@
 import sys
 from PySide6.QtWidgets import QApplication, QMainWindow, QVBoxLayout, QWidget, QHBoxLayout
+import asyncio
 
 from delay import DelayButton
 from save_path import FileSaveButton
@@ -7,6 +8,7 @@ from host_table import HostTable
 from play import PlayButton
 from stop import StopButton
 from log import LogCheckBox
+from engine import host_pipeline
 
 # teoricamente sulla riga sotto posso mettere i delay in secondi e aggiungere la directory dove salvare i file del ping creando un layout QHBoxLayout
 class DreamPingApp(QMainWindow):
@@ -16,6 +18,7 @@ class DreamPingApp(QMainWindow):
         self.setGeometry(100, 100, 500, 400)
         self.play_status = False
         self.stop_status = False
+        self.running_status = False
 
         central_widget = QWidget()
 
@@ -24,7 +27,7 @@ class DreamPingApp(QMainWindow):
 
         self.delay_widget = DelayButton()
         self.save_widget = FileSaveButton()
-        host_widget = HostTable()
+        self.host_widget = HostTable()
         play_widget = PlayButton()  
         stop_widget = StopButton()
         log_widget = LogCheckBox()
@@ -35,7 +38,7 @@ class DreamPingApp(QMainWindow):
         horizontal_layout.addWidget(play_widget)
         horizontal_layout.addWidget(stop_widget)
 
-        layout.addWidget(host_widget)
+        layout.addWidget(self.host_widget)
         layout.addLayout(horizontal_layout)
 
         central_widget.setLayout(layout)
@@ -56,6 +59,11 @@ class DreamPingApp(QMainWindow):
             print(delay, type(delay)) 
             print(save_path, type(save_path))
             print("play from function")
+            #hosts = self.host_widget.table.
+            #def thread_play(delay, save_path):
+            #    self.running_status = True
+            #    while self.play_status:
+            #        asyncio.run(host_pipeline(hosts, save_path))
 
 
     def stop(self):
