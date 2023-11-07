@@ -4,7 +4,7 @@ from icmplib import ping
 import datetime
 from typing import List
 
-async def check_host(host: str, name: str, save_path: str, log: bool) -> None:
+async def check_host(host: str, name: str, save_path: str, log: bool = True) -> None:
     response = ping(host, count=1, timeout=0.1)
     async with aiofile.AIOFile(f'{save_path}/{host}.txt', 'a') as afp:
         if log:
