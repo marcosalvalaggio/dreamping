@@ -13,6 +13,6 @@ async def check_host(host: str, name: str, save_path: str, log: bool) -> None:
             if response.is_alive == False:
                 await afp.write(f'host address: {host} | host name {name} | status: {"alive" if response.is_alive==True else "dead"} | time: {datetime.datetime.now()}\n')
                 
-async def host_pipeline(hosts: List[str], name: str, save_path: str, ) -> None:
-    await asyncio.gather(*[check_host(host=host, name=name, save_path=save_path) for host in hosts])
+async def host_pipeline(hosts: List[str], names: str, save_path: str, ) -> None:
+    await asyncio.gather(*[check_host(host=hosts[idx], name=names[idx], save_path=save_path) for idx in range(len(hosts))])
 
