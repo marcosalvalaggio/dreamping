@@ -30,7 +30,7 @@ class HostTable(QWidget):
         
         self.setLayout(layout)
 
-    def add_host(self):
+    def add_host(self) -> None:
         host_address = self.host_input.text()
         host_name = self.name_input.text()
         if host_address and host_name:
@@ -41,7 +41,7 @@ class HostTable(QWidget):
         self.host_input.clear()
         self.name_input.clear()
 
-    def remove_host(self):
+    def remove_host(self) -> None:
         selected_items = self.table.selectedItems()
         if selected_items:
             row = selected_items[0].row()
