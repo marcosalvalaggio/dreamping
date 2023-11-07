@@ -2,6 +2,7 @@ import sys
 from PySide6.QtWidgets import QApplication, QMainWindow, QVBoxLayout, QWidget, QHBoxLayout
 import asyncio
 import threading
+from typing import List
 
 from delay import DelayButton
 from save_path import FileSaveButton
@@ -31,11 +32,11 @@ class DreamPingApp(QMainWindow):
         self.host_widget = HostTable()
         play_widget = PlayButton()  
         stop_widget = StopButton()
-        log_widget = LogCheckBox()
+        self.log_widget = LogCheckBox()
         
         horizontal_layout.addWidget(self.delay_widget)
         horizontal_layout.addWidget(self.save_widget)
-        horizontal_layout.addWidget(log_widget)
+        horizontal_layout.addWidget(self.log_widget)
         horizontal_layout.addWidget(play_widget)
         horizontal_layout.addWidget(stop_widget)
 
@@ -49,10 +50,10 @@ class DreamPingApp(QMainWindow):
         play_widget.input_field.clicked.connect(self.play)
         stop_widget.input_field.clicked.connect(self.stop)
 
-    async def thread_play(self, delay, save_path, hosts, names):
+    async def thread_play(self, delay: int, save_path: str, hosts: List[str], names: List[str], log: bool):
         self.running_status = True
         while self.running_status:
-            await host_pipeline(hosts=hosts, names=names, save_path=save_path)
+            await host_pipeline(hosts=hosts, names=names, save_path=save_path, log=log)
             await asyncio.sleep(delay)
             if self.stop_status:
                 break 
@@ -62,6 +63,7 @@ class DreamPingApp(QMainWindow):
         self.stop_status = False
         delay = self.delay_widget.get_delay()
         save_path = self.save_widget.folder_path
+        log = self.log_widget.input_field.isChecked()
         if delay is None:
             print("No delay has been set")
         else:
@@ -79,7 +81,7 @@ class DreamPingApp(QMainWindow):
             print(hosts)
             if save_path:
                 self.stop_status = False
-                play_thread = threading.Thread(target=lambda: asyncio.run(self.thread_play(delay, save_path, hosts, names)))
+                play_thread = threading.Thread(target=lambda: asyncio.run(self.thread_play(delay, save_path, hosts, names, log=log)))
                 play_thread.start()
                     
     def stop(self):
