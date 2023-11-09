@@ -20,6 +20,7 @@ class DreamPingApp(QMainWindow):
         self.play_status = False
         self.stop_status = False
         self.running_status = False
+        self.already_running = False
 
         central_widget = QWidget()
 
@@ -80,9 +81,13 @@ class DreamPingApp(QMainWindow):
                 names.append(name)
             if save_path:
                 if len(hosts) != 0:
-                    self.stop_status = False
-                    play_thread = threading.Thread(target=lambda: asyncio.run(self.thread_play(delay, save_path, hosts, names, log=log)))
-                    play_thread.start()
+                    if not self.already_running:
+                        self.already_running = True
+                        self.stop_status = False
+                        play_thread = threading.Thread(target=lambda: asyncio.run(self.thread_play(delay, save_path, hosts, names, log=log)))
+                        play_thread.start()
+                    else:
+                        self.update_status("A play is already running")
                 else:
                     self.update_status("No host has been set")
             else:
@@ -96,6 +101,7 @@ class DreamPingApp(QMainWindow):
             self.play_status = False
             self.stop_status = True
             self.running_status = False
+            self.already_running = False
 
     def update_status(self, message):
         self.status_label.setText(message)
