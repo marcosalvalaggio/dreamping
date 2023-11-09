@@ -1,5 +1,5 @@
 import sys
-from PySide6.QtWidgets import QApplication, QMainWindow, QVBoxLayout, QWidget, QHBoxLayout
+from PySide6.QtWidgets import QApplication, QMainWindow, QVBoxLayout, QWidget, QHBoxLayout, QLabel  # Added QLabel
 import asyncio
 import threading
 from typing import List
@@ -12,7 +12,6 @@ from stop import StopButton
 from log import LogCheckBox
 from engine import host_pipeline
 
-# teoricamente sulla riga sotto posso mettere i delay in secondi e aggiungere la directory dove salvare i file del ping creando un layout QHBoxLayout
 class DreamPingApp(QMainWindow):
     def __init__(self):
         super().__init__()
@@ -33,6 +32,9 @@ class DreamPingApp(QMainWindow):
         play_widget = PlayButton()  
         stop_widget = StopButton()
         self.log_widget = LogCheckBox()
+
+        # Added QLabel for status
+        self.status_label = QLabel('Status: Not Running')
         
         horizontal_layout.addWidget(self.delay_widget)
         horizontal_layout.addWidget(self.save_widget)
@@ -42,11 +44,11 @@ class DreamPingApp(QMainWindow):
 
         layout.addWidget(self.host_widget)
         layout.addLayout(horizontal_layout)
+        layout.addWidget(self.status_label)  # Added status label
 
         central_widget.setLayout(layout)
         self.setCentralWidget(central_widget)
 
-        # Lab
         play_widget.input_field.clicked.connect(self.play)
         stop_widget.input_field.clicked.connect(self.stop)
 
@@ -64,12 +66,11 @@ class DreamPingApp(QMainWindow):
         delay = self.delay_widget.get_delay()
         save_path = self.save_widget.folder_path
         log = self.log_widget.input_field.isChecked()
+
         if delay is None:
-            print("No delay has been set")
+            self.update_status("No delay has been set")
         else:
-            print(delay, type(delay)) 
-            print(save_path, type(save_path))
-            print("Play from function") 
+            self.update_status(f"Status: Running with delay {delay} seconds")
             hosts = []
             names = []
             for row in range(self.host_widget.table.rowCount()):
@@ -77,8 +78,6 @@ class DreamPingApp(QMainWindow):
                 hosts.append(host)
                 name = self.host_widget.table.item(row, 1).text()
                 names.append(name)
-            print(names)
-            print(hosts)
             if save_path:
                 self.stop_status = False
                 play_thread = threading.Thread(target=lambda: asyncio.run(self.thread_play(delay, save_path, hosts, names, log=log)))
@@ -86,12 +85,15 @@ class DreamPingApp(QMainWindow):
                     
     def stop(self):
         if not self.play_status:
-            print("No play has to be stopped")
+            self.update_status("No play has to be stopped")
         else:
+            self.update_status("Status: Not Running")
             self.play_status = False
             self.stop_status = True
             self.running_status = False
-            print("Stop from function")
+
+    def update_status(self, message):
+        self.status_label.setText(message)
 
 
 def main():
