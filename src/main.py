@@ -79,9 +79,14 @@ class DreamPingApp(QMainWindow):
                 name = self.host_widget.table.item(row, 1).text()
                 names.append(name)
             if save_path:
-                self.stop_status = False
-                play_thread = threading.Thread(target=lambda: asyncio.run(self.thread_play(delay, save_path, hosts, names, log=log)))
-                play_thread.start()
+                if len(hosts) != 0:
+                    self.stop_status = False
+                    play_thread = threading.Thread(target=lambda: asyncio.run(self.thread_play(delay, save_path, hosts, names, log=log)))
+                    play_thread.start()
+                else:
+                    self.update_status("No host has been set")
+            else:
+                self.update_status("No path has been set")
                     
     def stop(self):
         if not self.play_status:
