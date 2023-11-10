@@ -11,6 +11,7 @@ from play import PlayButton
 from stop import StopButton
 from log import LogCheckBox
 from engine import host_pipeline
+from status import StatusLabel
 
 class DreamPingApp(QMainWindow):
     def __init__(self):
@@ -33,9 +34,9 @@ class DreamPingApp(QMainWindow):
         play_widget = PlayButton()  
         stop_widget = StopButton()
         self.log_widget = LogCheckBox()
+        self.status_label = StatusLabel()
 
         # Added QLabel for status
-        self.status_label = QLabel('Status: Not Running')
         
         horizontal_layout.addWidget(self.delay_widget)
         horizontal_layout.addWidget(self.save_widget)
@@ -69,9 +70,9 @@ class DreamPingApp(QMainWindow):
         log = self.log_widget.input_field.isChecked()
 
         if delay is None:
-            self.update_status("No delay has been set")
+            self.status_label.update_status("No delay has been set")
         else:
-            self.update_status(f"Status: Running with delay {delay} seconds")
+            self.status_label.update_status(f"Status: Running with delay {delay} seconds")
             hosts = []
             names = []
             for row in range(self.host_widget.table.rowCount()):
@@ -87,24 +88,21 @@ class DreamPingApp(QMainWindow):
                         play_thread = threading.Thread(target=lambda: asyncio.run(self.thread_play(delay, save_path, hosts, names, log=log)))
                         play_thread.start()
                     else:
-                        self.update_status("A play is already running")
+                        self.status_label.update_status("A play is already running")
                 else:
-                    self.update_status("No host has been set")
+                    self.status_label.update_status("No host has been set")
             else:
-                self.update_status("No path has been set")
+                self.status_label.update_status("No path has been set")
                     
     def stop(self):
         if not self.play_status:
-            self.update_status("No play has to be stopped")
+            self.status_label.update_status("No play has to be stopped")
         else:
-            self.update_status("Status: Not Running")
+            self.status_label.update_status("Status: Not Running")
             self.play_status = False
             self.stop_status = True
             self.running_status = False
             self.already_running = False
-
-    def update_status(self, message):
-        self.status_label.setText(message)
 
 
 def main():
