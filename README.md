@@ -1,4 +1,5 @@
 ## DreamPing
 
-* add status led to the GUI
-* Add the status to the list of ping entries on the list.
+<h1 align="center">
+<img src="example.png" width="500">
+</h1><br>
