@@ -3,7 +3,7 @@ from PySide6.QtWidgets import QWidget, QHBoxLayout, QLabel
 class StatusLabel(QWidget):
     def __init__(self):
         super().__init__()
-        self.input_field = QLabel('Status: Not Running')
+        self.input_field = QLabel('Not Running')
         layout = QHBoxLayout()
         layout.addWidget(self.input_field)
         self.setLayout(layout)

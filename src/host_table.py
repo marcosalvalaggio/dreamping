@@ -12,8 +12,8 @@ class HostTable(QWidget):
         remove_host_button = QPushButton("🗑️")
         remove_host_button.setFixedWidth(30)
         self.table = QTableWidget()
-        self.table.setColumnCount(2)
-        self.table.setHorizontalHeaderLabels(['Host Address', 'Host Name'])
+        self.table.setColumnCount(3)
+        self.table.setHorizontalHeaderLabels(['Host Address', 'Host Name', 'Host Status'])
 
         horizontal_layout = QHBoxLayout()
         horizontal_layout.addWidget(self.host_input)
@@ -38,6 +38,7 @@ class HostTable(QWidget):
             self.table.insertRow(row_position)
             self.table.setItem(row_position, 0, QTableWidgetItem(host_address))
             self.table.setItem(row_position, 1, QTableWidgetItem(host_name))
+            self.table.setItem(row_position, 2, QTableWidgetItem("⚪"))
         self.host_input.clear()
         self.name_input.clear()
 

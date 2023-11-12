@@ -1,9 +1,8 @@
 import sys
-from PySide6.QtWidgets import QApplication, QMainWindow, QVBoxLayout, QWidget, QHBoxLayout, QLabel  # Added QLabel
-import asyncio
+from PySide6.QtWidgets import QApplication, QMainWindow, QVBoxLayout, QWidget, QHBoxLayout, QTableWidgetItem
 import threading
+import time 
 from typing import List
-
 from delay import DelayButton
 from save_path import FileSaveButton
 from host_table import HostTable
@@ -54,12 +53,15 @@ class DreamPingApp(QMainWindow):
         play_widget.input_field.clicked.connect(self.play)
         stop_widget.input_field.clicked.connect(self.stop)
 
-    async def thread_play(self, delay: int, save_path: str, hosts: List[str], names: List[str], log: bool):
+    def thread_play(self, delay: int, save_path: str, hosts: List[str], names: List[str], log: bool):
         self.running_status = True
         while self.running_status:
-            await host_pipeline(hosts=hosts, names=names, save_path=save_path, log=log)
-            await asyncio.sleep(delay)
+            status = host_pipeline(hosts=hosts, names=names, save_path=save_path, log=log)
+            [self.host_widget.table.setItem(idx, 2, QTableWidgetItem("🟢"  if elem[hosts[idx]] == "alive" else "🟠")) for idx, elem in enumerate(status)]
+            print(status)
+            time.sleep(delay)
             if self.stop_status:
+                [self.host_widget.table.setItem(idx, 2, QTableWidgetItem("⚪")) for idx, elem in enumerate(status)]
                 break 
 
     def play(self):
@@ -72,7 +74,7 @@ class DreamPingApp(QMainWindow):
         if delay is None:
             self.status_label.update_status("No delay has been set")
         else:
-            self.status_label.update_status(f"Status: Running with delay {delay} seconds")
+            self.status_label.update_status(f"Running with delay {delay} seconds")
             hosts = []
             names = []
             for row in range(self.host_widget.table.rowCount()):
@@ -85,8 +87,8 @@ class DreamPingApp(QMainWindow):
                     if not self.already_running:
                         self.already_running = True
                         self.stop_status = False
-                        play_thread = threading.Thread(target=lambda: asyncio.run(self.thread_play(delay, save_path, hosts, names, log=log)))
-                        play_thread.start()
+                        self.play_thread = threading.Thread(target=self.thread_play, args=(delay, save_path, hosts, names, log))
+                        self.play_thread.start()
                     else:
                         self.status_label.update_status("A play is already running")
                 else:
@@ -98,11 +100,13 @@ class DreamPingApp(QMainWindow):
         if not self.play_status:
             self.status_label.update_status("No play has to be stopped")
         else:
-            self.status_label.update_status("Status: Not Running")
+            self.status_label.update_status("Not Running")
             self.play_status = False
             self.stop_status = True
             self.running_status = False
-            self.already_running = False
+            self.already_running = False 
+            self.play_thread.join()
+
 
 
 def main():
