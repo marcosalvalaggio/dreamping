@@ -1,5 +1,6 @@
 import sys
-from PySide6.QtWidgets import QApplication, QMainWindow, QVBoxLayout, QWidget, QHBoxLayout, QTableWidgetItem
+from PySide6.QtWidgets import QApplication, QMainWindow, QVBoxLayout, QWidget, QHBoxLayout, QTableWidgetItem, QPushButton, QFileDialog
+from PySide6.QtCore import Qt
 import threading
 import time 
 from typing import List
@@ -26,6 +27,7 @@ class DreamPingApp(QMainWindow):
 
         layout = QVBoxLayout()
         horizontal_layout = QHBoxLayout()
+        setup_horizontal_layout = QHBoxLayout()
 
         self.delay_widget = DelayButton()
         self.save_widget = FileSaveButton()
@@ -34,8 +36,16 @@ class DreamPingApp(QMainWindow):
         stop_widget = StopButton()
         self.log_widget = LogCheckBox()
         self.status_label = StatusLabel()
-
-        # Added QLabel for status
+        self.export_button = QPushButton()
+        self.export_button.setText("Export")
+        self.export_button.setFixedWidth(60)
+        self.import_button = QPushButton()
+        self.import_button.setText("Import")
+        self.import_button.setFixedWidth(60)
+        
+        setup_horizontal_layout.addStretch(1)
+        setup_horizontal_layout.addWidget(self.import_button)
+        setup_horizontal_layout.addWidget(self.export_button)
         
         horizontal_layout.addWidget(self.delay_widget)
         horizontal_layout.addWidget(self.save_widget)
@@ -43,6 +53,7 @@ class DreamPingApp(QMainWindow):
         horizontal_layout.addWidget(play_widget)
         horizontal_layout.addWidget(stop_widget)
 
+        layout.addLayout(setup_horizontal_layout)
         layout.addWidget(self.host_widget)
         layout.addLayout(horizontal_layout)
         layout.addWidget(self.status_label)  # Added status label
@@ -106,6 +117,9 @@ class DreamPingApp(QMainWindow):
             self.running_status = False
             self.already_running = False 
             self.play_thread.join()
+
+    def export(self):
+        pass
 
 
 
