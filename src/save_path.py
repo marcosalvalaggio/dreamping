@@ -22,7 +22,7 @@ class FileSaveButton(QWidget):
         if folder_path:
             folder_path_to_print = str(folder_path.replace("C:/", "").split("/")[-1])
             folder_path_to_print = f"../{folder_path_to_print}"
-            print(folder_path)
+            #print(folder_path)
             self.folder_path = folder_path
             self.selected_path_button.setText(folder_path_to_print)
 

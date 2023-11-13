@@ -58,7 +58,7 @@ class DreamPingApp(QMainWindow):
         while self.running_status:
             status = host_pipeline(hosts=hosts, names=names, save_path=save_path, log=log)
             [self.host_widget.table.setItem(idx, 2, QTableWidgetItem("🟢"  if elem[hosts[idx]] == "alive" else "🟠")) for idx, elem in enumerate(status)]
-            print(status)
+            #print(status)
             time.sleep(delay)
             if self.stop_status:
                 [self.host_widget.table.setItem(idx, 2, QTableWidgetItem("⚪")) for idx, elem in enumerate(status)]
