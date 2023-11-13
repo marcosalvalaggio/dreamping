@@ -12,6 +12,7 @@ from stop import StopButton
 from log import LogCheckBox
 from engine import host_pipeline
 from status import StatusLabel
+import pandas as pd
 
 class DreamPingApp(QMainWindow):
     def __init__(self):
@@ -42,7 +43,7 @@ class DreamPingApp(QMainWindow):
         self.import_button = QPushButton()
         self.import_button.setText("Import")
         self.import_button.setFixedWidth(60)
-        
+
         setup_horizontal_layout.addStretch(1)
         setup_horizontal_layout.addWidget(self.import_button)
         setup_horizontal_layout.addWidget(self.export_button)
@@ -63,6 +64,8 @@ class DreamPingApp(QMainWindow):
 
         play_widget.input_field.clicked.connect(self.play)
         stop_widget.input_field.clicked.connect(self.stop)
+        self.export_button.clicked.connect(self.exporting)
+        self.import_button.clicked.connect(self.importing)
 
     def thread_play(self, delay: int, save_path: str, hosts: List[str], names: List[str], log: bool):
         self.running_status = True
@@ -118,10 +121,32 @@ class DreamPingApp(QMainWindow):
             self.already_running = False 
             self.play_thread.join()
 
-    def export(self):
-        pass
+    def exporting(self) -> None:
+        entity = {
+            'hosts': [],
+            'names': []
+        }
+        for row in range(self.host_widget.table.rowCount()):
+            entity['hosts'].append(self.host_widget.table.item(row, 0).text())
+            entity['names'].append(self.host_widget.table.item(row, 1).text())
+        df = pd.DataFrame(entity)
+        path = QFileDialog.getExistingDirectory(self, "Select a Folder")
+        try:
+            df.to_csv(f"{path}/export.csv", index=False, sep=";")
+            self.status_label.update_status("Exported host list")
+        except:
+            self.status_label.update_status("Exporting failed")
 
-
+    def importing(self):
+        path = QFileDialog.getOpenFileName(self, "Select a file", "", "CSV Files (*.csv)")[0]
+        df = pd.read_csv(path, sep=";")
+        num_rows, _ = df.shape
+        current_rows = self.host_widget.table.rowCount()
+        if num_rows > current_rows:
+            self.host_widget.table.setRowCount(num_rows)
+        for row in range(self.host_widget.table.rowCount()):
+            self.host_widget.table.setItem(row, 0, QTableWidgetItem(df.iloc[row,0]))
+            self.host_widget.table.setItem(row, 1, QTableWidgetItem(df.iloc[row, 1]))
 
 def main():
     app = QApplication(sys.argv)

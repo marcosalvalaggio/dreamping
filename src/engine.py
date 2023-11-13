@@ -8,7 +8,7 @@ def check_host(host: str, name: str, save_path: str, log: bool = True) -> dict:
         s = time.monotonic()
         response = ping(host, count=1, timeout=0.1)
         e = time.monotonic()
-        print(f"{e-s} sec.", host, name, log, response.is_alive)
+        #print(f"{e-s} sec.", host, name, log, response.is_alive)
         if log:
             with open(f'{save_path}/{host}.txt', 'a') as f:
                 f.write(f'host address: {host} | host name: {name} | status: {"alive" if response.is_alive==True else "dead"} | time: {datetime.datetime.now()}\n')
