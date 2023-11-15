@@ -147,6 +147,7 @@ class DreamPingApp(QMainWindow):
         for row in range(self.host_widget.table.rowCount()):
             self.host_widget.table.setItem(row, 0, QTableWidgetItem(df.iloc[row,0]))
             self.host_widget.table.setItem(row, 1, QTableWidgetItem(df.iloc[row, 1]))
+            self.host_widget.table.setItem(row, 2, QTableWidgetItem("⚪"))
 
 def main():
     app = QApplication(sys.argv)
