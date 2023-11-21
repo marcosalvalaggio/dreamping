@@ -7,4 +7,4 @@
 ### Todos
 
 * Add SMTP server config
-* Add import/export host list
+* Add status set to reduce data in the log file
