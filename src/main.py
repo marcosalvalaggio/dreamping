@@ -9,7 +9,6 @@ from save_path import FileSaveButton
 from host_table import HostTable
 from play import PlayButton
 from stop import StopButton
-from log import LogCheckBox
 from engine import host_pipeline
 from status import StatusLabel
 import pandas as pd
@@ -35,7 +34,6 @@ class DreamPingApp(QMainWindow):
         self.host_widget = HostTable()
         play_widget = PlayButton()  
         stop_widget = StopButton()
-        #self.log_widget = LogCheckBox()
         self.status_label = StatusLabel()
         self.export_button = QPushButton()
         self.export_button.setText("Export")
@@ -50,7 +48,6 @@ class DreamPingApp(QMainWindow):
         
         horizontal_layout.addWidget(self.delay_widget)
         horizontal_layout.addWidget(self.save_widget)
-        #horizontal_layout.addWidget(self.log_widget)
         horizontal_layout.addWidget(play_widget)
         horizontal_layout.addWidget(stop_widget)
         horizontal_layout.addStretch(1)
@@ -58,7 +55,7 @@ class DreamPingApp(QMainWindow):
         layout.addLayout(setup_horizontal_layout)
         layout.addWidget(self.host_widget)
         layout.addLayout(horizontal_layout)
-        layout.addWidget(self.status_label)  # Added status label
+        layout.addWidget(self.status_label)
 
         central_widget.setLayout(layout)
         self.setCentralWidget(central_widget)
@@ -84,7 +81,6 @@ class DreamPingApp(QMainWindow):
         self.stop_status = False
         delay = self.delay_widget.get_delay()
         save_path = self.save_widget.folder_path
-        #log = self.log_widget.input_field.isChecked()
 
         if delay is None:
             self.status_label.update_status("No delay has been set")
