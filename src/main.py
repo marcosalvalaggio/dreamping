@@ -97,16 +97,14 @@ class DreamPingApp(QMainWindow):
                 hosts.append(host)
                 name = self.host_widget.table.item(row, 1).text()
                 names.append(name)
-                if len(hosts) != 0:
-                    if not self.already_running:
-                        self.already_running = True
-                        self.stop_status = False
-                        self.play_thread = threading.Thread(target=self.thread_play, args=(delay, save_path, hosts, names))
-                        self.play_thread.start()
-                    else:
-                        self.status_label.update_status("A play is already running")
+            if len(hosts) != 0:
+                if not self.already_running:
+                    self.already_running = True
+                    self.stop_status = False
+                    self.play_thread = threading.Thread(target=self.thread_play, args=(delay, save_path, hosts, names))
+                    self.play_thread.start()
                 else:
-                    self.status_label.update_status("No host has been set")
+                    self.status_label.update_status("A play is already running")
                     
     def stop(self):
         if not self.play_status:
