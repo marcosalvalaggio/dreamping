@@ -35,7 +35,7 @@ class DreamPingApp(QMainWindow):
         self.host_widget = HostTable()
         play_widget = PlayButton()  
         stop_widget = StopButton()
-        self.log_widget = LogCheckBox()
+        #self.log_widget = LogCheckBox()
         self.status_label = StatusLabel()
         self.export_button = QPushButton()
         self.export_button.setText("Export")
@@ -50,9 +50,10 @@ class DreamPingApp(QMainWindow):
         
         horizontal_layout.addWidget(self.delay_widget)
         horizontal_layout.addWidget(self.save_widget)
-        horizontal_layout.addWidget(self.log_widget)
+        #horizontal_layout.addWidget(self.log_widget)
         horizontal_layout.addWidget(play_widget)
         horizontal_layout.addWidget(stop_widget)
+        horizontal_layout.addStretch(1)
 
         layout.addLayout(setup_horizontal_layout)
         layout.addWidget(self.host_widget)
@@ -67,10 +68,10 @@ class DreamPingApp(QMainWindow):
         self.export_button.clicked.connect(self.exporting)
         self.import_button.clicked.connect(self.importing)
 
-    def thread_play(self, delay: int, save_path: str, hosts: List[str], names: List[str], log: bool):
+    def thread_play(self, delay: int, save_path: str, hosts: List[str], names: List[str]):
         self.running_status = True
         while self.running_status:
-            status = host_pipeline(hosts=hosts, names=names, save_path=save_path, log=log)
+            status = host_pipeline(hosts=hosts, names=names, save_path=save_path)
             [self.host_widget.table.setItem(idx, 2, QTableWidgetItem("🟢"  if elem[hosts[idx]] == "alive" else "🟠")) for idx, elem in enumerate(status)]
             #print(status)
             time.sleep(delay)
@@ -83,7 +84,7 @@ class DreamPingApp(QMainWindow):
         self.stop_status = False
         delay = self.delay_widget.get_delay()
         save_path = self.save_widget.folder_path
-        log = self.log_widget.input_field.isChecked()
+        #log = self.log_widget.input_field.isChecked()
 
         if delay is None:
             self.status_label.update_status("No delay has been set")
@@ -96,19 +97,16 @@ class DreamPingApp(QMainWindow):
                 hosts.append(host)
                 name = self.host_widget.table.item(row, 1).text()
                 names.append(name)
-            if save_path:
                 if len(hosts) != 0:
                     if not self.already_running:
                         self.already_running = True
                         self.stop_status = False
-                        self.play_thread = threading.Thread(target=self.thread_play, args=(delay, save_path, hosts, names, log))
+                        self.play_thread = threading.Thread(target=self.thread_play, args=(delay, save_path, hosts, names))
                         self.play_thread.start()
                     else:
                         self.status_label.update_status("A play is already running")
                 else:
                     self.status_label.update_status("No host has been set")
-            else:
-                self.status_label.update_status("No path has been set")
                     
     def stop(self):
         if not self.play_status:
