@@ -2,7 +2,8 @@ from icmplib import ping
 import datetime
 from typing import List
 import time
-#from scapy.layers.l2 import getmacbyip
+import subprocess
+import re
 
 
 def check_host(host: str, name: str, save_path: str) -> dict:
@@ -25,12 +26,19 @@ def host_pipeline(hosts: List[str], names: List[str], save_path: str) -> List[di
     return status_list
 
 
-# def get_mac_address(host: str) -> str:
-#     try:
-#         mac = getmacbyip(host)
-#         return mac
-#     except:
-#         return "unknown"
+def get_mac_address(host: str) -> str:
+    try:
+        result = subprocess.check_output(['arp', '-a', host])
+        result = result.decode('utf-8')
+        mac_pattern = re.compile(r'(\b[0-9a-fA-F]{2}[:-]){5}[0-9a-fA-F]{2}\b')
+        match = mac_pattern.search(result)
+        if match:
+            mac = match.group(0).replace('-', ':')
+            return mac
+        else: 
+            return ""
+    except:
+        return ""
 
 
 if __name__ == "__main__":

@@ -1,5 +1,5 @@
 from PySide6.QtWidgets import QWidget, QLineEdit, QHBoxLayout, QPushButton, QVBoxLayout, QTableWidget, QTableWidgetItem
-#from engine import get_mac_address
+from engine import get_mac_address
 
 class HostTable(QWidget):
     def __init__(self):
@@ -13,7 +13,7 @@ class HostTable(QWidget):
         remove_host_button = QPushButton("🗑️")
         remove_host_button.setFixedWidth(30)
         self.table = QTableWidget()
-        self.table.setColumnCount(3)
+        self.table.setColumnCount(4)
         self.table.setHorizontalHeaderLabels(['Host Address', 'Host Name', 'Host Status', 'Mac Address'])
 
         horizontal_layout = QHBoxLayout()
@@ -34,14 +34,14 @@ class HostTable(QWidget):
     def add_host(self) -> None:
         host_address = self.host_input.text()
         host_name = self.name_input.text()
-        #mac = get_mac_address(host_address)
+        mac = get_mac_address(host_address)
         if host_address and host_name:
             row_position = self.table.rowCount()
             self.table.insertRow(row_position)
             self.table.setItem(row_position, 0, QTableWidgetItem(host_address))
             self.table.setItem(row_position, 1, QTableWidgetItem(host_name))
             self.table.setItem(row_position, 2, QTableWidgetItem("⚪"))
-            #self.table.setItem(row_position, 3, QTableWidgetItem(mac))
+            self.table.setItem(row_position, 3, QTableWidgetItem(mac))
         self.host_input.clear()
         self.name_input.clear()
 
