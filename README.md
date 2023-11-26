@@ -8,6 +8,7 @@
 
 * Add SMTP server config
 * Add status set to reduce data in the log file
+* Block remove host during execution 
 
 ### Build executable file
 
