@@ -36,9 +36,9 @@ def get_mac_address(host: str) -> str:
             mac = match.group(0).replace('-', ':')
             return mac
         else: 
-            return ""
+            return "not found"
     except:
-        return ""
+        return "not found"
 
 
 if __name__ == "__main__":
