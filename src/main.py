@@ -9,7 +9,7 @@ from save_path import FileSaveButton
 from host_table import HostTable
 from play import PlayButton
 from stop import StopButton
-from engine import host_pipeline, get_mac_address
+from engine import host_pipeline, get_mac_address, get_mac_info
 from status import StatusLabel
 import pandas as pd
 
@@ -17,7 +17,7 @@ class DreamPingApp(QMainWindow):
     def __init__(self):
         super().__init__()
         self.setWindowTitle("DreamPing")
-        self.setGeometry(100, 100, 500, 400)
+        self.setGeometry(100, 100, 600, 400)
         self.play_status = False
         self.stop_status = False
         self.running_status = False
@@ -138,10 +138,12 @@ class DreamPingApp(QMainWindow):
             self.host_widget.table.setRowCount(num_rows)
         for row in range(self.host_widget.table.rowCount()):
             mac = get_mac_address(df.iloc[row,0])
+            mac_info = get_mac_info(mac)
             self.host_widget.table.setItem(row, 0, QTableWidgetItem(df.iloc[row,0]))
             self.host_widget.table.setItem(row, 1, QTableWidgetItem(df.iloc[row, 1]))
             self.host_widget.table.setItem(row, 2, QTableWidgetItem("⚪"))
-            self.host_widget.table.setItem(row, 3, QTableWidgetItem(mac))
+            self.host_widget.table.setItem(row, 3, QTableWidgetItem(mac)) 
+            self.host_widget.table.setItem(row, 4, QTableWidgetItem(mac_info)) 
 
 def main():
     app = QApplication(sys.argv)

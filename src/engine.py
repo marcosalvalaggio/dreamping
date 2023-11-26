@@ -4,7 +4,7 @@ from typing import List
 import time
 import subprocess
 import re
-
+import requests
 
 def check_host(host: str, name: str, save_path: str) -> dict:
     try:
@@ -39,6 +39,21 @@ def get_mac_address(host: str) -> str:
             return "not found"
     except:
         return "not found"
+
+
+# https://www.macvendorlookup.com/api
+def get_mac_info(mac: str) -> str:
+    try:
+        url = f'https://api.macvendors.com/{mac}'
+        response = requests.get(url)
+        if response.status_code == 200:
+            data = response.text
+            return data
+        else:
+            return "not found"
+    except:
+        return "not found"
+
 
 
 if __name__ == "__main__":
