@@ -38,7 +38,7 @@ def get_mac_address(host: str) -> str:
         else: 
             return "not found"
     except:
-        return "not found"
+        return "network error"
 
 
 # https://www.macvendorlookup.com/api
@@ -52,7 +52,7 @@ def get_mac_info(mac: str) -> str:
         else:
             return "not found"
     except:
-        return "not found"
+        return "network error"
 
 
 
