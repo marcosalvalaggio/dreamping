@@ -67,9 +67,16 @@ class DreamPingApp(QMainWindow):
 
     def thread_play(self, delay: int, save_path: str, hosts: List[str], names: List[str]):
         self.running_status = True
+        entity_status = []
         while self.running_status:
             status = host_pipeline(hosts=hosts, names=names, save_path=save_path)
+            if status != entity_status:
+                print("smtp send")
+            else:
+                print("no smtp send")
+            entity_status = status
             [self.host_widget.table.setItem(idx, 2, QTableWidgetItem("🟢"  if elem[hosts[idx]] == "alive" else "🟠")) for idx, elem in enumerate(status)]
+            print(entity_status)
             #print(status)
             time.sleep(delay)
             if self.stop_status:
