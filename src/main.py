@@ -101,7 +101,7 @@ class DreamPingApp(QMainWindow):
                     self.play_thread.start()
                 else:
                     self.status_label.update_status("A play is already running")
-                    
+        
     def stop(self):
         if not self.play_status:
             self.status_label.update_status("No play has to be stopped")
@@ -131,19 +131,22 @@ class DreamPingApp(QMainWindow):
 
     def importing(self):
         path = QFileDialog.getOpenFileName(self, "Select a file", "", "CSV Files (*.csv)")[0]
-        df = pd.read_csv(path, sep=";")
-        num_rows, _ = df.shape
-        current_rows = self.host_widget.table.rowCount()
-        if num_rows > current_rows:
-            self.host_widget.table.setRowCount(num_rows)
-        for row in range(self.host_widget.table.rowCount()):
-            mac = get_mac_address(df.iloc[row,0])
-            mac_info = get_mac_info(mac)
-            self.host_widget.table.setItem(row, 0, QTableWidgetItem(df.iloc[row,0]))
-            self.host_widget.table.setItem(row, 1, QTableWidgetItem(df.iloc[row, 1]))
-            self.host_widget.table.setItem(row, 2, QTableWidgetItem("⚪"))
-            self.host_widget.table.setItem(row, 3, QTableWidgetItem(mac)) 
-            self.host_widget.table.setItem(row, 4, QTableWidgetItem(mac_info)) 
+        try:
+            df = pd.read_csv(path, sep=";")
+            num_rows, _ = df.shape
+            current_rows = self.host_widget.table.rowCount()
+            if num_rows > current_rows:
+                self.host_widget.table.setRowCount(num_rows)
+            for row in range(self.host_widget.table.rowCount()):
+                mac = get_mac_address(df.iloc[row,0])
+                mac_info = get_mac_info(mac)
+                self.host_widget.table.setItem(row, 0, QTableWidgetItem(df.iloc[row,0]))
+                self.host_widget.table.setItem(row, 1, QTableWidgetItem(df.iloc[row, 1]))
+                self.host_widget.table.setItem(row, 2, QTableWidgetItem("⚪"))
+                self.host_widget.table.setItem(row, 3, QTableWidgetItem(mac)) 
+                self.host_widget.table.setItem(row, 4, QTableWidgetItem(mac_info)) 
+        except:
+            self.status_label.update_status("Importing failed")
 
 def main():
     app = QApplication(sys.argv)
