@@ -1,1 +1,1 @@
-pyinstaller --onedir src/main.py
+pyinstaller --onefile --icon=logo.ico src/dreamping.py

@@ -1,6 +1,7 @@
 import sys
 from PySide6.QtWidgets import QApplication, QMainWindow, QVBoxLayout, QWidget, QHBoxLayout, QTableWidgetItem, QPushButton, QFileDialog
 from PySide6.QtCore import Qt
+from PySide6.QtGui import QIcon
 import threading
 import time 
 from typing import List
@@ -12,6 +13,7 @@ from stop import StopButton
 from engine import host_pipeline, get_mac_address, get_mac_info
 from status import StatusLabel
 import pandas as pd
+
 
 class DreamPingApp(QMainWindow):
     def __init__(self):
@@ -157,6 +159,8 @@ class DreamPingApp(QMainWindow):
 
 def main():
     app = QApplication(sys.argv)
+    app_icon = QIcon("../logo.ico")
+    app.setWindowIcon(app_icon)
     dream_app = DreamPingApp()
     dream_app.show()
     sys.exit(app.exec())
