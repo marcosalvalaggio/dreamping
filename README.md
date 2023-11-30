@@ -12,6 +12,5 @@
 ### Build executable file
 
 ```console
-pyinstaller --noconsole --onefile src/main.py
-pyinstaller --onefile src/main.py
+pyinstaller --onefile --icon=logo.ico src/dreamping.py
 ```
