@@ -8,6 +8,7 @@ powershell -Command "python --version" > nul 2>&1
 
 if %errorlevel% neq 0 (
     echo Python is not installed in the home directory.
+    echo Install Python and Git in your machine
 ) else (
     echo Python is installed in the home directory.
 )

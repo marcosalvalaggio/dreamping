@@ -1,1 +1,1 @@
-pyinstaller --onefile --icon=logo.ico src/dreamping.py
+pyinstaller --icon=logo.ico src/dreamping.py --noconsole
