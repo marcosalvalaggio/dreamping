@@ -159,7 +159,7 @@ class DreamPingApp(QMainWindow):
 
 def main():
     app = QApplication(sys.argv)
-    app_icon = QIcon("../logo.ico")
+    app_icon = QIcon(r"C:\Users\marsa\code\dreamping\logo.ico")
     app.setWindowIcon(app_icon)
     dream_app = DreamPingApp()
     dream_app.show()

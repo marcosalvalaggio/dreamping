@@ -14,3 +14,9 @@
 ```console
 pyinstaller --icon=logo.ico src/dreamping.py --noconsole
 ```
+
+or 
+
+```
+pyinstaller dreamping.spec
+```
