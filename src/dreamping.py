@@ -19,7 +19,7 @@ class DreamPingApp(QMainWindow):
     def __init__(self):
         super().__init__()
         self.setWindowTitle("DreamPing")
-        self.setGeometry(100, 100, 600, 400)
+        self.setGeometry(100, 100, 400, 400)
         self.play_status = False
         self.stop_status = False
         self.running_status = False
