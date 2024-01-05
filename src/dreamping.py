@@ -14,6 +14,7 @@ from engine import host_pipeline, get_mac_address, get_mac_info
 from status import StatusLabel
 from message import SMTPConfig
 import pandas as pd
+import smtplib
 
 
 class DreamPingApp(QMainWindow):
@@ -77,6 +78,7 @@ class DreamPingApp(QMainWindow):
             status = host_pipeline(hosts=hosts, names=names, save_path=save_path)
             if status != entity_status:
                 print("smtp send")
+
             else:
                 print("no smtp send")
             entity_status = status
