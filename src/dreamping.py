@@ -36,7 +36,7 @@ class DreamPingApp(QMainWindow):
         self.delay_widget = DelayButton()
         self.save_widget = FileSaveButton()
         self.host_widget = HostTable()
-        mail_widget = SMTPConfig()
+        self.mail_widget = SMTPConfig()
         play_widget = PlayButton()  
         stop_widget = StopButton()
         self.status_label = StatusLabel()
@@ -53,7 +53,7 @@ class DreamPingApp(QMainWindow):
         
         horizontal_layout.addWidget(self.delay_widget)
         horizontal_layout.addWidget(self.save_widget)
-        horizontal_layout.addWidget(mail_widget)
+        horizontal_layout.addWidget(self.mail_widget)
         horizontal_layout.addWidget(play_widget)
         horizontal_layout.addWidget(stop_widget)
         horizontal_layout.addStretch(1)
@@ -78,7 +78,10 @@ class DreamPingApp(QMainWindow):
             status = host_pipeline(hosts=hosts, names=names, save_path=save_path)
             if status != entity_status:
                 print("smtp send")
-
+                with smtplib.SMTP(self.mail_widget.smtp_server, self.mail_widget.smtp_port) as server:
+                    server.starttls()
+                    server.login(self.mail_widget.sender_email, self.mail_widget.sender_password)
+                    server.sendmail(self.mail_widget.sender_email, self.mail_widget.reciver_email, f"DreamPing\n\n{status}")
             else:
                 print("no smtp send")
             entity_status = status

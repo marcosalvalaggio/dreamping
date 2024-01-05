@@ -1,4 +1,5 @@
 from PySide6.QtWidgets import QWidget, QVBoxLayout, QPushButton, QDialog, QLineEdit, QDialogButtonBox, QHBoxLayout, QLabel
+import smtplib
 
 class SMTPConfig(QWidget):
     def __init__(self):
@@ -38,7 +39,7 @@ class SMTPConfig(QWidget):
         smtp_server_input.setPlaceholderText("Enter SMTP Server name")
 
         smtp_port_input = QLineEdit()
-        smtp_port_input.setPlaceholderText("Enter SMTP Port number")
+        smtp_port_input.setPlaceholderText("Enter SMTP Port number (465, 587)")
 
         sender_email_input = QLineEdit()
         sender_email_input.setPlaceholderText("Enter Sender Email")
@@ -75,4 +76,12 @@ class SMTPConfig(QWidget):
             # You can use the config_data as needed
             print("Config Data:", config_data)
 
-            
+            try:
+                with smtplib.SMTP(self.smtp_server, self.smtp_port) as server:
+                    server.starttls()
+                    server.login(self.sender_email, self.sender_password)
+                    server.sendmail(self.sender_email, self.reciver_email, "Hello World")
+                    server.quit()
+            except Exception as e:
+                print(e)
+                
