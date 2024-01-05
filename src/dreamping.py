@@ -12,6 +12,7 @@ from play import PlayButton
 from stop import StopButton
 from engine import host_pipeline, get_mac_address, get_mac_info
 from status import StatusLabel
+from message import SMTPConfig
 import pandas as pd
 
 
@@ -34,6 +35,7 @@ class DreamPingApp(QMainWindow):
         self.delay_widget = DelayButton()
         self.save_widget = FileSaveButton()
         self.host_widget = HostTable()
+        mail_widget = SMTPConfig()
         play_widget = PlayButton()  
         stop_widget = StopButton()
         self.status_label = StatusLabel()
@@ -50,6 +52,7 @@ class DreamPingApp(QMainWindow):
         
         horizontal_layout.addWidget(self.delay_widget)
         horizontal_layout.addWidget(self.save_widget)
+        horizontal_layout.addWidget(mail_widget)
         horizontal_layout.addWidget(play_widget)
         horizontal_layout.addWidget(stop_widget)
         horizontal_layout.addStretch(1)
