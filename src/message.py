@@ -28,6 +28,18 @@ class SMTPConfig(QWidget):
 
         self.setLayout(layout)
 
+    def send_email(self, message: str = "Hello World from DreamPing"):
+        try:
+            with smtplib.SMTP(self.smtp_server, self.smtp_port) as server:
+                server.starttls()
+                server.login(self.sender_email, self.sender_password)
+                server.sendmail(self.sender_email, self.reciver_email, message)
+                server.quit()
+                print("email send successfully")
+        except Exception as e:
+            print(e)
+
+
     def show_dialog(self):
         dialog = QDialog(self)
         dialog.setWindowTitle("SMTP Configuration")
@@ -73,15 +85,7 @@ class SMTPConfig(QWidget):
             self.sender_password = sender_password_input.text()
             self.reciver_email = reciver_email_input.text()
             config_data = [self.smtp_server, self.smtp_port, self.sender_email, self.sender_password, self.reciver_email]
-            # You can use the config_data as needed
             print("Config Data:", config_data)
+            self.send_email()
 
-            try:
-                with smtplib.SMTP(self.smtp_server, self.smtp_port) as server:
-                    server.starttls()
-                    server.login(self.sender_email, self.sender_password)
-                    server.sendmail(self.sender_email, self.reciver_email, "Hello World")
-                    server.quit()
-            except Exception as e:
-                print(e)
                 
