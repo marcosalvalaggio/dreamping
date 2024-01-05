@@ -1,5 +1,7 @@
 from PySide6.QtWidgets import QWidget, QVBoxLayout, QPushButton, QDialog, QLineEdit, QDialogButtonBox, QHBoxLayout, QLabel
 import smtplib
+from email.mime.text import MIMEText
+from email.mime.multipart import MIMEMultipart
 
 class SMTPConfig(QWidget):
     def __init__(self):
@@ -30,10 +32,19 @@ class SMTPConfig(QWidget):
 
     def send_email(self, message: str = "Hello World from DreamPing"):
         try:
+            # Create the MIME object
+            msg = MIMEMultipart()
+            msg['From'] = self.sender_email
+            msg['To'] = self.reciver_email
+            msg['Subject'] = 'DreamPing Status Update'
+            # Add body to the email
+            body = f'{message}\n\n'
+            msg.attach(MIMEText(body, 'plain'))
+
             with smtplib.SMTP(self.smtp_server, self.smtp_port) as server:
                 server.starttls()
                 server.login(self.sender_email, self.sender_password)
-                server.sendmail(self.sender_email, self.reciver_email, message)
+                server.sendmail(self.sender_email, self.reciver_email, msg.as_string())
                 server.quit()
                 print("email send successfully")
         except Exception as e:
@@ -86,6 +97,6 @@ class SMTPConfig(QWidget):
             self.reciver_email = reciver_email_input.text()
             config_data = [self.smtp_server, self.smtp_port, self.sender_email, self.sender_password, self.reciver_email]
             print("Config Data:", config_data)
-            self.send_email()
+            # self.send_email()
 
                 

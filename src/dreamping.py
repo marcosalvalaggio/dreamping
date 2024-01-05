@@ -78,7 +78,7 @@ class DreamPingApp(QMainWindow):
             status = host_pipeline(hosts=hosts, names=names, save_path=save_path)
             if status != entity_status:
                 print("smtp send")
-                self.mail_widget.send_email(message=f"status changed to {status}")
+                self.mail_widget.send_email(message=str(status))
             else:
                 print("no smtp send")
             entity_status = status
