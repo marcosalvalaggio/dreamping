@@ -14,11 +14,16 @@ class SMTPConfig(QWidget):
 
         layout = QHBoxLayout()
 
-        self.selected_path_button = QPushButton()
-        self.selected_path_button.setText("✉")
-        self.selected_path_button.setFixedWidth(40)
-        self.selected_path_button.clicked.connect(self.show_dialog)
-        layout.addWidget(self.selected_path_button)
+        self.smtp_button = QPushButton()
+        self.smtp_button.setText("📧")
+
+        # font = self.smtp_button.font()
+        # font.setPointSize(12)  # Change the size to your desired value
+        # self.smtp_button.setFont(font)
+
+        self.smtp_button.setFixedWidth(40)
+        self.smtp_button.clicked.connect(self.show_dialog)
+        layout.addWidget(self.smtp_button)
 
         self.setLayout(layout)
 
