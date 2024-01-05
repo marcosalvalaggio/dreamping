@@ -14,7 +14,6 @@ from engine import host_pipeline, get_mac_address, get_mac_info
 from status import StatusLabel
 from message import SMTPConfig
 import pandas as pd
-import smtplib
 
 
 class DreamPingApp(QMainWindow):
@@ -26,6 +25,7 @@ class DreamPingApp(QMainWindow):
         self.stop_status = False
         self.running_status = False
         self.already_running = False
+        self.verbose = False
 
         central_widget = QWidget()
 
@@ -77,14 +77,16 @@ class DreamPingApp(QMainWindow):
         while self.running_status:
             status = host_pipeline(hosts=hosts, names=names, save_path=save_path)
             if status != entity_status:
-                print("smtp send")
+                if self.verbose:
+                    print("smtp send")
                 self.mail_widget.send_email(message=str(status))
             else:
-                print("no smtp send")
+                if self.verbose:
+                    print("no smtp send")
             entity_status = status
             [self.host_widget.table.setItem(idx, 2, QTableWidgetItem("🟢"  if elem[hosts[idx]] == "alive" else "🟠")) for idx, elem in enumerate(status)]
-            print(entity_status)
-            #print(status)
+            if self.verbose:
+                print(entity_status)
             time.sleep(delay)
             if self.stop_status:
                 [self.host_widget.table.setItem(idx, 2, QTableWidgetItem("⚪")) for idx, elem in enumerate(status)]

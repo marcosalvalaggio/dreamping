@@ -14,6 +14,7 @@ class SMTPConfig(QWidget):
         self.sender_email = ""
         self.sender_password = ""
         self.reciver_email = ""
+        self.verbose = False
 
         layout = QHBoxLayout()
 
@@ -46,9 +47,11 @@ class SMTPConfig(QWidget):
                 server.login(self.sender_email, self.sender_password)
                 server.sendmail(self.sender_email, self.reciver_email, msg.as_string())
                 server.quit()
-                print("email send successfully")
+                if self.verbose:
+                    print("email send successfully")
         except Exception as e:
-            print(e)
+            if self.verbose:
+                print("Error: ", e)
 
 
     def show_dialog(self):
@@ -68,6 +71,7 @@ class SMTPConfig(QWidget):
         sender_email_input.setPlaceholderText("Enter Sender Email")
         
         sender_password_input = QLineEdit()
+        sender_password_input.setEchoMode(QLineEdit.Password)
         sender_password_input.setPlaceholderText("Enter Sender Password")
 
         reciver_email_input = QLineEdit()
@@ -96,7 +100,8 @@ class SMTPConfig(QWidget):
             self.sender_password = sender_password_input.text()
             self.reciver_email = reciver_email_input.text()
             config_data = [self.smtp_server, self.smtp_port, self.sender_email, self.sender_password, self.reciver_email]
-            print("Config Data:", config_data)
+            if self.verbose:
+                print("Config Data:", config_data)
             # self.send_email()
 
                 
