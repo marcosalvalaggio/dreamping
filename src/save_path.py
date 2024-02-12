@@ -10,7 +10,7 @@ class FileSaveButton(QWidget):
         layout = QHBoxLayout()
 
         self.selected_path_button = QPushButton()
-        self.selected_path_button.setText("Select Path")
+        self.selected_path_button.setText("Log Path")
         self.selected_path_button.setFixedWidth(80)
         self.selected_path_button.clicked.connect(self.show_dialog)
         layout.addWidget(self.selected_path_button)

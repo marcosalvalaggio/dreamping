@@ -5,7 +5,7 @@ a = Analysis(
     ['src\\dreamping.py'],
     pathex=[],
     binaries=[],
-    datas=[],
+    datas=[('logo.ico', '.')],
     hiddenimports=[],
     hookspath=[],
     hooksconfig={},

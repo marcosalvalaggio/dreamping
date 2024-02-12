@@ -1,3 +1,2 @@
 @echo off
-cd src
-python dreamping.py
+python src/dreamping.py
