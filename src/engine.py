@@ -11,7 +11,7 @@ def check_host(host: str, name: str, save_path: str) -> dict:
         #print(f"{e-s} sec.", host, name, log, response.is_alive)
         if save_path:
             with open(f'{save_path}/{host}-{name}.txt', 'a') as f:
-                f.write(f'host address: {host} | host name: {name} | status: {"alive" if response.is_alive==True else "dead"} | time: {datetime.datetime.now()}\n')
+                f.write(f'host address: {host} | host name: {name} | status: {"alive" if response.is_alive==True else "dead"} | avg_time: {response.avg_rtt} | time: {datetime.datetime.now()}\n')
             return {host: 'alive'} if response.is_alive==True else {host: 'dead'}
         else:
             return {host: 'alive'} if response.is_alive==True else {host: 'dead'}
