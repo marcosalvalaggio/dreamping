@@ -90,8 +90,9 @@ class DreamPingApp(QMainWindow):
         self.running_status = True
         entity_status = []
         while self.running_status:
-            status = host_pipeline(hosts=hosts, names=names, save_path=save_path)
-            if status != entity_status:
+            complete_status = host_pipeline(hosts=hosts, names=names, save_path=save_path)
+            status = [item[0] for item in complete_status]
+            if status[0] != entity_status:
                 if self.verbose:
                     print("smtp send")
                 self.mail_widget.send_email(message=str(status))
